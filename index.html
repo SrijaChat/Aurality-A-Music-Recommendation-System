@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurality</title>
+   <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhai+2&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Baloo Bhai 2', sans-serif;
+            background: linear-gradient(to right, #8e44ad, #1abc9c);
+            color: #9b59b6;
+            text-align: center;
+            padding: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            max-width: 500px;
+            background: rgba(255,255,255,0.2);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(0,0,0,0.2);
+        }
+        h2 {
+            font-weight: 600;
+            font-size: 24px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 50px;
+            margin-top: 15px;
+            font-size: 16px;
+            background: #fff;
+            color: #333;
+            text-align: center;
+        }
+        button {
+            background-color: #9b59b6;
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            margin-top: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #7d3c98;
+        }
+        #results {
+            margin-top: 20px;
+            text-align: left;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin-bottom: 8px;
+        }
+    </style>
+    <script>
+    function getRecommendations() {
+        let song = document.getElementById("songInput").value.trim();
+        let resultsDiv = document.getElementById("results");
+
+        if (!song) {
+            alert("Please enter a song name!");
+            return;
+        }
+
+        fetch(`http://127.0.0.1:5000/recommend?song=${encodeURIComponent(song)}`)
+            .then(response => response.json())
+            .then(data => {
+                resultsDiv.innerHTML = "";
+                
+                if (data.error) {
+                    resultsDiv.innerHTML = `<p style="color:red;">${data.error}</p>`;
+                } else {
+                    let songList = "<h3>Recommended Songs:</h3><ul>";
+                    data.forEach((song) => {
+                        songList += `<li><strong>${song.name}</strong> by ${song.artists} (${song.year})</li>`;
+                    });
+                    songList += "</ul>";
+                    resultsDiv.innerHTML = songList;
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching recommendations:", error);
+                resultsDiv.innerHTML = `<p style="color:red;">Failed to get recommendations.</p>`;
+            });
+    }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1 class="title">Aurality🎶</h1>
+    <input type="text" id="songInput" placeholder="Enter a song name">
+    <button onclick="getRecommendations()">Get Recommendations</button>
+    <div id="results"></div>
+</div>
+</body>
+</html>
