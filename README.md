@@ -6,6 +6,7 @@ frontend for user interaction. Recommendations are generated dynamically by iden
 tracks most similar to the user’s input song using audio feature vectors. The model delivers 
 highly relevant results and ensures a seamless user experience. 
 
+## 🔥 Aurality UI Preview
 - 🎵 Personalized Recommendations
    - Aurality suggests songs based on mood, energy, tempo, and acoustic features using a content-based filtering algorithm.
 
